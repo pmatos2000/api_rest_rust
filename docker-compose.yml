@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: senha
+      POSTGRES_DB: nome_do_banco
+    ports:
+      - "5432:5432"
+  app:
+    build: .
+    depends_on:
+      - db
