@@ -1,16 +1,20 @@
-use actix_web::{App, HttpServer};
+use dotenv::dotenv;
+use crate::config::migration::executar_migracao;
+use crate::api::config::configurar_rotas;
 
 mod api;
 mod aplicacao;
 mod dominio;
+mod config;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| {
-        App::new()
-            .service(api::usuario::usuario::registrar_rota())
-    })
-        .bind(("0.0.0.0", 8080))?
-        .run()
-        .await
+
+    dotenv().ok();
+    
+    executar_migracao().await;
+    
+    configurar_rotas().await?;
+
+    Ok(())
 }
