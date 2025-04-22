@@ -1,6 +1,7 @@
 use dotenv::dotenv;
 use crate::config::migration::executar_migracao;
 use crate::api::config::configurar_rotas;
+use crate::config::db_pool::criar_pool;
 
 mod api;
 mod aplicacao;
@@ -12,9 +13,10 @@ async fn main() -> std::io::Result<()> {
 
     dotenv().ok();
     
-    executar_migracao().await;
+    let pool = criar_pool().await;
     
-    configurar_rotas().await?;
+    executar_migracao(&pool).await;
+    configurar_rotas(&pool).await?;
 
     Ok(())
 }
