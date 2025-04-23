@@ -1,8 +1,9 @@
 use std::process;
-use sqlx::PgPool;
+use crate::config::db_pool::POOL;
 
-pub async fn executar_migracao(pool: &PgPool) {
-    match sqlx::migrate!("./migrations").run(pool).await {
+pub async fn executar_migracao() {
+    let pool = POOL.clone();
+    match sqlx::migrate!("./migrations").run(&*pool).await {
         Ok(_) => {
             println!("Migrações aplicadas com sucesso!");
         }

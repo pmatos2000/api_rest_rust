@@ -1,13 +1,15 @@
-use once_cell::sync::Lazy;
 use sqlx::postgres::PgPool;
 use std::sync::Arc;
+use once_cell::sync::Lazy;
 
-pub async fn criar_pool() -> PgPool {
+
+pub static POOL: Lazy<Arc<PgPool>> = Lazy::new(|| {
     let database_url = std::env::var("DATABASE_URL")
         .expect("A variável DATABASE_URL não está configurada");
-
-    let pool = PgPool::connect(&database_url).await
+    
+    let pool = PgPool::connect_lazy(&database_url)
         .expect("Falha ao conectar ao banco de dados");
     
-    pool
-}
+    Arc::new(pool)
+});
+
