@@ -239,7 +239,6 @@ dependencies = [
  "once_cell",
  "serde",
  "sqlx",
- "tokio",
 ]
 
 [[package]]
